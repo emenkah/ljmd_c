@@ -5,6 +5,7 @@
 #include <constants.h>
 #include <utilities.h>
 #include <force_kinerg.h>
+#include <fptimeIntegration.h>
 
 void velverlet(mdsys_t *sys);
 
