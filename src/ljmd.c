@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "data.h"
+#include "utilities.h"
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
@@ -20,27 +21,9 @@
 const double kboltz=0.0019872067;     /* boltzman constant in kcal/mol/K */
 const double mvsq2e=2390.05736153349; /* m*v^2 in kcal/mol */
 
- 
-/* helper function: zero out an array */
-static void azzero(double *d, const int n)
-{
-    int i;
-    for (i=0; i<n; ++i) {
-        d[i]=0.0;
-    }
-}
-
-/* helper function: apply minimum image convention */
-static double pbc(double x, const double boxby2)
-{
-    while (x >  boxby2) x -= 2.0*boxby2;
-    while (x < -boxby2) x += 2.0*boxby2;
-    return x;
-}
-
 /* compute kinetic energy */
 static void ekin(mdsys_t *sys)
-{   
+{
     int i;
 
     sys->ekin=0.0;
@@ -49,6 +32,8 @@ static void ekin(mdsys_t *sys)
     }
     sys->temp = 2.0*sys->ekin/(3.0*sys->natoms-3.0)/kboltz;
 }
+
+ 
 
 /* compute forces */
 static void force(mdsys_t *sys) 
