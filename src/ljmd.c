@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <input.h>
+#include <velverlet.h>
+#include <test_kinerg.h>
 
 #include <data.h>
 #include <utilities.h>
@@ -20,37 +22,13 @@
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
-/* velocity verlet */
-static void velverlet(mdsys_t *sys)
- {
-     int i;
- 
-     /* first part: propagate velocities by half and positions by full step */
-     for (i=0; i<sys->natoms; ++i) {
-         sys->vx[i] += 0.5*sys->dt / mvsq2e * sys->fx[i] / sys->mass;
-         sys->vy[i] += 0.5*sys->dt / mvsq2e * sys->fy[i] / sys->mass;
-         sys->vz[i] += 0.5*sys->dt / mvsq2e * sys->fz[i] / sys->mass;
-         sys->rx[i] += sys->dt*sys->vx[i];
-         sys->ry[i] += sys->dt*sys->vy[i];
-         sys->rz[i] += sys->dt*sys->vz[i];
-     }
- 
-     /* compute forces and potential energy */
-     force(sys);
- 
-     /* second part: propagate velocities by another half step */
-     for (i=0; i<sys->natoms; ++i) {
-         sys->vx[i] += 0.5*sys->dt / mvsq2e * sys->fx[i] / sys->mass;
-         sys->vy[i] += 0.5*sys->dt / mvsq2e * sys->fy[i] / sys->mass;
-         sys->vz[i] += 0.5*sys->dt / mvsq2e * sys->fz[i] / sys->mass;
-     }
- }
-
-
 
 /* main */
 int main(int argc, char **argv) 
 {
+     test_kinerg();
+
+
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     FILE *fp,*traj,*erg;
@@ -114,6 +92,7 @@ int main(int argc, char **argv)
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
+
     ekin(&sys);
     
     erg=fopen(ergfile,"w");
