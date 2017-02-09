@@ -9,7 +9,7 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
-#include "data.h"
+#include <data.h>
 #include <stdio.h>
 #include <string.h>
 

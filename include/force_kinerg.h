@@ -9,11 +9,10 @@
 #ifndef FORCE_KINERG_H
 #define FORCE_KINERG_H
 
+#include <data.h>
+#include <constants.h>
 
 
-
-#include "data.h"
-#include "constants.h"
 /* compute kinetic energy */
 void ekin(mdsys_t *sys);
 

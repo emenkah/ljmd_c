@@ -1,12 +1,7 @@
-/* 
- * simple lennard-jones potential MD code with velocity verlet.
- * units: Length=Angstrom, Mass=amu; Energy=kcal
- *
- * baseline c version.
- */
+#include <input.h>
 
-#include "data.h"
 #define BLEN 200
+
 
 /* helper function: read a line and then return
    the first string with whitespace stripped off */
@@ -36,4 +31,3 @@ int get_a_line(FILE *fp, char *buf)
     }
     return 0;
 }
- 
