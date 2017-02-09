@@ -26,6 +26,5 @@ struct _mdsys {
 };
 typedef struct _mdsys mdsys_t;
 
-int get_a_line(FILE *fp, char *buf);
  
 #endif

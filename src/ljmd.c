@@ -10,10 +10,11 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
+#include <input.h>
 
-#include "data.h"
-#include "utilities.h"
-#include "constants.h"
+#include <data.h>
+#include <utilities.h>
+#include <constants.h>
 
 #include <force_kinerg.h>
 
