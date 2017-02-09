@@ -8,17 +8,8 @@
 #ifndef VERLET_H
 #define VERLET_H
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <math.h>
-#include <input.h>
-
-#include <data.h>
-#include <force_kinerg.h>
-#include <output.h>
-
+#include <fpvelverlet.h>
+#include <spvelverlet.h>
 
 /* velocity verlet */
 void velverlet(mdsys_t *sys);
