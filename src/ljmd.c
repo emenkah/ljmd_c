@@ -21,41 +21,85 @@
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
+int readInputRest(mdsys_t *sys , char * restfile, char * trajfile, char * ergfile, char * line, int *nprint){
 
-
-
-/* main */
-int main(int argc, char **argv) 
-{
-    int nprint, i;
-    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *fp,*traj,*erg;
-    mdsys_t sys;
+    int i;
+	FILE *fp;	
 
     /* read input file */
     if(get_a_line(stdin,line)) return 1;
-    sys.natoms=atoi(line);
+    sys->natoms=atoi(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.mass=atof(line);
+    sys->mass=atof(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.epsilon=atof(line);
+    sys->epsilon=atof(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.sigma=atof(line);
+    sys->sigma=atof(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.rcut=atof(line);
+    sys->rcut=atof(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.box=atof(line);
+    sys->box=atof(line);
     if(get_a_line(stdin,restfile)) return 1;
     if(get_a_line(stdin,trajfile)) return 1;
     if(get_a_line(stdin,ergfile)) return 1;
     if(get_a_line(stdin,line)) return 1;
-    sys.nsteps=atoi(line);
+    sys->nsteps=atoi(line);
     if(get_a_line(stdin,line)) return 1;
-    sys.dt=atof(line);
+    sys->dt=atof(line);
     if(get_a_line(stdin,line)) return 1;
-    nprint=atoi(line);
+    *nprint=atoi(line);
 
     /* allocate memory */
+    sys->rx=(double *)malloc(sys->natoms*sizeof(double));
+    sys->ry=(double *)malloc(sys->natoms*sizeof(double));
+    sys->rz=(double *)malloc(sys->natoms*sizeof(double));
+    sys->vx=(double *)malloc(sys->natoms*sizeof(double));
+    sys->vy=(double *)malloc(sys->natoms*sizeof(double));
+    sys->vz=(double *)malloc(sys->natoms*sizeof(double));
+    sys->fx=(double *)malloc(sys->natoms*sizeof(double));
+    sys->fy=(double *)malloc(sys->natoms*sizeof(double));
+    sys->fz=(double *)malloc(sys->natoms*sizeof(double));
+
+    /* read restart */
+    fp=fopen(restfile,"r");
+    if(fp) {
+      int err;
+        for (i=0; i<sys->natoms; ++i) {
+            err = fscanf(fp,"%lf%lf%lf",sys->rx+i, sys->ry+i, sys->rz+i);
+        }
+        for (i=0; i<sys->natoms; ++i) {
+            err = fscanf(fp,"%lf%lf%lf",sys->vx+i, sys->vy+i, sys->vz+i);
+        }
+        fclose(fp);
+        azzero(sys->fx, sys->natoms);
+        azzero(sys->fy, sys->natoms);
+        azzero(sys->fz, sys->natoms);
+	(void)err;
+	// if err != 0 return -1;
+    } else {
+        perror("cannot read restart file");
+        return 3;
+    }
+
+	return 0;
+}
+
+
+void forceTest(mdsys_t sys, int num_particles){
+	
+	int nprint;
+    sys.natoms=num_particles;
+    sys.mass=39.948;
+    sys.epsilon=0.2379;
+    sys.sigma=3.405;
+    sys.rcut=8.5;
+    sys.box=17.1580;
+    sys.nsteps=1000;
+    sys.dt=0.5;
+    nprint=100;
+
+
+    // allocate memory 
     sys.rx=(double *)malloc(sys.natoms*sizeof(double));
     sys.ry=(double *)malloc(sys.natoms*sizeof(double));
     sys.rz=(double *)malloc(sys.natoms*sizeof(double));
@@ -66,26 +110,46 @@ int main(int argc, char **argv)
     sys.fy=(double *)malloc(sys.natoms*sizeof(double));
     sys.fz=(double *)malloc(sys.natoms*sizeof(double));
 
-    /* read restart */
-    fp=fopen(restfile,"r");
-    if(fp) {
-      int err;
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
-        }
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
-        }
-        fclose(fp);
-        azzero(sys.fx, sys.natoms);
-        azzero(sys.fy, sys.natoms);
-        azzero(sys.fz, sys.natoms);
-	(void)err;
-	// if err != 0 return -1;
-    } else {
-        perror("cannot read restart file");
-        return 3;
-    }
+    azzero(sys.fx, sys.natoms);
+    azzero(sys.fy, sys.natoms);
+    azzero(sys.fz, sys.natoms);
+
+	
+	force(&sys);
+	
+	if (abs(sys.fx[0]) == abs(sys.fx[1])){
+		printf("\tForce Test Success\n");
+	}
+	else {
+		printf("\tForce Test fialed\n");
+	}
+
+}
+
+
+
+
+
+
+/* main */
+int main(int argc, char **argv) {
+
+	int nprint, err;
+    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
+    FILE *fp,*traj,*erg;
+	
+	mdsys_t sys, sys1;
+	
+    /* read input file */
+	err=readInputRest(&sys ,  restfile,  trajfile,  ergfile,  line, &nprint);
+	if (err== 0){
+		printf("\tFile read: SUCESSS\n");
+	}
+	else {
+		printf("\tInput file read FAILED!\n");
+	}
+	
+
 
     /* initialize forces and energies.*/
     sys.nfi=0;
@@ -117,6 +181,11 @@ int main(int argc, char **argv)
     printf("Simulation Done.\n");
     fclose(erg);
     fclose(traj);
+
+
+	/***Unit tetsting ***/
+   	forceTest(sys1, 2); 
+
 
     free(sys.rx);
     free(sys.ry);
