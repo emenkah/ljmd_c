@@ -8,6 +8,7 @@
 #ifndef VERLET_H
 #define VERLET_H
 
+#include <fpvelverlet.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
