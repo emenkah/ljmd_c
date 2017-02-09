@@ -15,6 +15,9 @@
 #include "utilities.h"
 #include "constants.h"
 
+#include <force_kinerg.h>
+
+
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
@@ -106,16 +109,19 @@ int main(int argc, char **argv)
     /* read restart */
     fp=fopen(restfile,"r");
     if(fp) {
+      int err;
         for (i=0; i<sys.natoms; ++i) {
-            fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
+            err = fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
         }
         for (i=0; i<sys.natoms; ++i) {
-            fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
+            err = fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
         }
         fclose(fp);
         azzero(sys.fx, sys.natoms);
         azzero(sys.fy, sys.natoms);
         azzero(sys.fz, sys.natoms);
+	(void)err;
+	// if err != 0 return -1;
     } else {
         perror("cannot read restart file");
         return 3;

@@ -6,7 +6,11 @@
  */
 
 
-#include "force_kinerg.h"
+#include <force_kinerg.h>
+#include <utilities.h>
+#include <math.h>
+
+
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
