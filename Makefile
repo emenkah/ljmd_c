@@ -21,10 +21,10 @@ clean:
 	rm -f *.mod objects/*.o ljmd-serial.x
 
 # linker rule
-ljmd-serial.x: $(OBJ) $(DEPS)
+ljmd-serial.x: $(OBJ) 
 	$(CC) -o $@ $(CFLAGS) $^ $(LDLIBS)
 
 # compilation pattern rule for objects
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
