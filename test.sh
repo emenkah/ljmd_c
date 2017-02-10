@@ -11,5 +11,5 @@ echo "----testing executable-------"
 echo "                             "
 echo "                             "
 
-cd examples && ./ljmd-serial.x < argon_108.inp 
+cd examples && ./ljmd-serial.x < argon_108.inp && gprof ljmd-serial.x gmon.out > analysis2_opt.txt && head analysis2_opt.txt
 
