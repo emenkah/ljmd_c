@@ -14,6 +14,7 @@ DEPS=$(wildcard $(INCLUDE)/*.h)
 OBJ=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 default: ljmd-serial.x
+	@mkdir -p bin
 	mv ./ljmd-serial.x bin 
 
 
@@ -26,6 +27,7 @@ ljmd-serial.x: $(OBJ)
 
 # compilation pattern rule for objects
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
+	@mkdir -p $(OBJDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 ljmd-serial.so: $(OBJ)
