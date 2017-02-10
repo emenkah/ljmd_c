@@ -76,7 +76,7 @@ void forceTest(mdsys_t sys, int num_particles){
 /*******Data Verification *********/
 void InputReadTest(mdsys_t sys,  char * restfile, char * trajfile, char * ergfile, int nprint){
 
-	printf("\tVerifying INput Parameters\n");
+	printf("\tVerifying Input Parameters\n");
 	printf("\t%d \n", sys.natoms);
     printf("\t%g \n", sys.mass);
     printf("\t%g \n", sys.epsilon);
