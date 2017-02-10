@@ -5,6 +5,7 @@
 #include <data.h>
 #include <constants.h>
 #include <utilities.h>
+#include <force_kinerg.h>
 
 void test_kinerg()
 {

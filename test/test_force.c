@@ -45,10 +45,10 @@ void forceTest(mdsys_t sys, int num_particles){
 	force(&sys);
 	
 	if (abs(sys.fx[0]) == abs(sys.fx[1]) && (sys.fx[0] || sys.fx[1] < 0)){
-		printf("\tForce Test Success\n");
+		printf("\t TEST force:\t ------ PASSED\n");
 	}
 	else {
-		printf("\tForce Test failed\n");
+		printf("\tTEST force:\t ------ FAILED \n");
 	}
 
 
@@ -66,7 +66,9 @@ void forceTest(mdsys_t sys, int num_particles){
 
 
 int main(){
+mdsys_t sys;
+
 /***Unit tetsting ***/
-forceTest(sys1, 2); 
+forceTest(sys, 2); 
 return 0;
 }

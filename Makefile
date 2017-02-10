@@ -1,7 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=gcc
-CFLAGS=-Wall -O3 -ffast-math -fomit-frame-pointer
+CFLAGS=-Wall -O3 -ffast-math -fomit-frame-pointer -fPIC
 LDLIBS=-lm
 INCLUDE = include
 SRCDIR = src
@@ -17,7 +17,7 @@ default: ljmd-serial.x
 	mv ./ljmd-serial.x bin 
 
 
-clean:
+clean: clean_test
 	rm -f *.mod objects/*.o ljmd-serial.x
 
 # linker rule
@@ -27,4 +27,16 @@ ljmd-serial.x: $(OBJ)
 # compilation pattern rule for objects
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPS)
 	$(CC) -c $(CFLAGS) $< -o $@
+
+ljmd-serial.so: $(OBJ)
+	$(CC) -o $@ $^ -shared $(LDLIBS)
+	@cp $@ test
+
+test: ljmd-serial.so
+	$(MAKE)	$(MFLAGS) -C test
+
+.PHONY: clean_test
+
+clean_test:
+	$(MAKE)	$(MFLAGS) -C test clean
 
