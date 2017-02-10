@@ -16,70 +16,27 @@
 #include <utilities.h>
 #include <force_kinerg.h>
 #include <output.h>
+#include <velverlet.h>
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
-/* velocity verlet */
-static void velverlet(mdsys_t *sys)
- {
-     int i;
- 
-     /* first part: propagate velocities by half and positions by full step */
-     for (i=0; i<sys->natoms; ++i) {
-         sys->vx[i] += 0.5*sys->dt / mvsq2e * sys->fx[i] / sys->mass;
-         sys->vy[i] += 0.5*sys->dt / mvsq2e * sys->fy[i] / sys->mass;
-         sys->vz[i] += 0.5*sys->dt / mvsq2e * sys->fz[i] / sys->mass;
-         sys->rx[i] += sys->dt*sys->vx[i];
-         sys->ry[i] += sys->dt*sys->vy[i];
-         sys->rz[i] += sys->dt*sys->vz[i];
-     }
- 
-     /* compute forces and potential energy */
-     force(sys);
- 
-     /* second part: propagate velocities by another half step */
-     for (i=0; i<sys->natoms; ++i) {
-         sys->vx[i] += 0.5*sys->dt / mvsq2e * sys->fx[i] / sys->mass;
-         sys->vy[i] += 0.5*sys->dt / mvsq2e * sys->fy[i] / sys->mass;
-         sys->vz[i] += 0.5*sys->dt / mvsq2e * sys->fz[i] / sys->mass;
-     }
- }
+
+void forceTest(mdsys_t sys, int num_particles){
+	
+	int nprint;
+    sys.natoms=num_particles;
+    sys.mass=39.948;
+    sys.epsilon=0.2379;
+    sys.sigma=3.405;
+    sys.rcut=8.5;
+    sys.box=17.1580;
+    sys.nsteps=1000;
+    sys.dt=0.5;
+    nprint=100;
 
 
-
-/* main */
-int main(int argc, char **argv) 
-{
-    int nprint, i;
-    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *fp,*traj,*erg;
-    mdsys_t sys;
-
-    /* read input file */
-    if(get_a_line(stdin,line)) return 1;
-    sys.natoms=atoi(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.mass=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.epsilon=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.sigma=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.rcut=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.box=atof(line);
-    if(get_a_line(stdin,restfile)) return 1;
-    if(get_a_line(stdin,trajfile)) return 1;
-    if(get_a_line(stdin,ergfile)) return 1;
-    if(get_a_line(stdin,line)) return 1;
-    sys.nsteps=atoi(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.dt=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    nprint=atoi(line);
-
-    /* allocate memory */
+    // allocate memory 
     sys.rx=(double *)malloc(sys.natoms*sizeof(double));
     sys.ry=(double *)malloc(sys.natoms*sizeof(double));
     sys.rz=(double *)malloc(sys.natoms*sizeof(double));
@@ -90,26 +47,57 @@ int main(int argc, char **argv)
     sys.fy=(double *)malloc(sys.natoms*sizeof(double));
     sys.fz=(double *)malloc(sys.natoms*sizeof(double));
 
-    /* read restart */
-    fp=fopen(restfile,"r");
-    if(fp) {
-      int err;
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
-        }
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
-        }
-        fclose(fp);
-        azzero(sys.fx, sys.natoms);
-        azzero(sys.fy, sys.natoms);
-        azzero(sys.fz, sys.natoms);
-	(void)err;
-	// if err != 0 return -1;
-    } else {
-        perror("cannot read restart file");
-        return 3;
-    }
+    azzero(sys.fx, sys.natoms);
+    azzero(sys.fy, sys.natoms);
+    azzero(sys.fz, sys.natoms);
+
+	
+	force(&sys);
+	
+	if (abs(sys.fx[0]) == abs(sys.fx[1]) && (sys.fx[0] || sys.fx[1] < 0)){
+		printf("\tForce Test Success\n");
+	}
+	else {
+		printf("\tForce Test failed\n");
+	}
+
+
+    free(sys.rx);
+    free(sys.ry);
+    free(sys.rz);
+    free(sys.vx);
+    free(sys.vy);
+    free(sys.vz);
+    free(sys.fx);
+    free(sys.fy);
+    free(sys.fz);
+
+}
+
+
+
+
+
+
+/* main */
+int main(int argc, char **argv) {
+
+	int nprint, err;
+    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
+    FILE *fp,*traj,*erg;
+	
+	mdsys_t sys, sys1;
+	
+    /* read input file */
+	err=readInputRest(&sys ,  restfile,  trajfile,  ergfile,  line, &nprint);
+	if (err== 0){
+		printf("\tFile read: SUCESSS\n");
+	}
+	else {
+		printf("\tInput file read FAILED!\n");
+	}
+	
+
 
     /* initialize forces and energies.*/
     sys.nfi=0;
@@ -141,6 +129,11 @@ int main(int argc, char **argv)
     printf("Simulation Done.\n");
     fclose(erg);
     fclose(traj);
+
+
+	/***Unit tetsting ***/
+   	forceTest(sys1, 2); 
+
 
     free(sys.rx);
     free(sys.ry);
