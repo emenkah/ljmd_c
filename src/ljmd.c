@@ -117,12 +117,23 @@ void forceTest(mdsys_t sys, int num_particles){
 	
 	force(&sys);
 	
-	if (abs(sys.fx[0]) == abs(sys.fx[1])){
+	if (abs(sys.fx[0]) == abs(sys.fx[1]) && (sys.fx[0] || sys.fx[1] < 0)){
 		printf("\tForce Test Success\n");
 	}
 	else {
-		printf("\tForce Test fialed\n");
+		printf("\tForce Test failed\n");
 	}
+
+
+    free(sys.rx);
+    free(sys.ry);
+    free(sys.rz);
+    free(sys.vx);
+    free(sys.vy);
+    free(sys.vz);
+    free(sys.fx);
+    free(sys.fy);
+    free(sys.fz);
 
 }
 
