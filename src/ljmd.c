@@ -13,6 +13,8 @@
 #include <input.h>
 #include <velverlet.h>
 #include <test_kinerg.h>
+#include <test_velverlet.h>
+
 
 #include <data.h>
 #include <utilities.h>
@@ -26,6 +28,7 @@
 /* main */
 int main(int argc, char **argv) 
 {
+     test_velverlet();
      test_kinerg();
 
 

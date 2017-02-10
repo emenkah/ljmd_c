@@ -52,9 +52,9 @@ void test_kinerg()
     ekin(&sys);
     
     if(abs(sys.ekin-result)<1e-12)
-        printf("TEST Kinetic energy :------ PASSED\n");
+        printf("\t TEST Kinetic energy :\t ------ \tPASSED\n");
     else{
-        printf("TEST Kinetic energy test:------ FAILED\n");
+        printf("\t TEST Kinetic energy test:\t------ \t FAILED\n");
         printf("%f \n%f\n",sys.ekin,result);
 	}
     
