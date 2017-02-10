@@ -1,10 +1,10 @@
 #include <simulation.h>
 
 /* generic file- or pathname buffer length */
-#define BLEN 200
 
 
-void simulation(int nprint,int natoms, int nsteps, double mass, double epsilon, 
+
+int simulation(int nprint,int natoms, int nsteps, double mass, double epsilon, 
           double sigma, double box, double rcut, double dt, char restfile[BLEN], 
 char trajfile[BLEN], char ergfile[BLEN] ) 
 {
@@ -23,30 +23,30 @@ char trajfile[BLEN], char ergfile[BLEN] )
 
 
  /* allocate memory */
-     sys->rx=(double *)malloc(sys->natoms*sizeof(double));
-     sys->ry=(double *)malloc(sys->natoms*sizeof(double));
-     sys->rz=(double *)malloc(sys->natoms*sizeof(double));
-     sys->vx=(double *)malloc(sys->natoms*sizeof(double));
-     sys->vy=(double *)malloc(sys->natoms*sizeof(double));
-     sys->vz=(double *)malloc(sys->natoms*sizeof(double));
-     sys->fx=(double *)malloc(sys->natoms*sizeof(double));
-     sys->fy=(double *)malloc(sys->natoms*sizeof(double));
-     sys->fz=(double *)malloc(sys->natoms*sizeof(double));
+     sys.rx=(double *)malloc(sys.natoms*sizeof(double));
+     sys.ry=(double *)malloc(sys.natoms*sizeof(double));
+     sys.rz=(double *)malloc(sys.natoms*sizeof(double));
+     sys.vx=(double *)malloc(sys.natoms*sizeof(double));
+     sys.vy=(double *)malloc(sys.natoms*sizeof(double));
+     sys.vz=(double *)malloc(sys.natoms*sizeof(double));
+     sys.fx=(double *)malloc(sys.natoms*sizeof(double));
+     sys.fy=(double *)malloc(sys.natoms*sizeof(double));
+     sys.fz=(double *)malloc(sys.natoms*sizeof(double));
 
 /* read restart */
      fp=fopen(restfile,"r");
      if(fp) {
        int err;
-         for (i=0; i<sys->natoms; ++i) {
-             err = fscanf(fp,"%lf%lf%lf",sys->rx+i, sys->ry+i, sys->rz+i);
+         for (i=0; i<sys.natoms; ++i) {
+             err = fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
          }
-         for (i=0; i<sys->natoms; ++i) {
-             err = fscanf(fp,"%lf%lf%lf",sys->vx+i, sys->vy+i, sys->vz+i);
+         for (i=0; i<sys.natoms; ++i) {
+             err = fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
          }
          fclose(fp);
-         azzero(sys->fx, sys->natoms);
-         azzero(sys->fy, sys->natoms);
-         azzero(sys->fz, sys->natoms);
+         azzero(sys.fx, sys.natoms);
+         azzero(sys.fy, sys.natoms);
+         azzero(sys.fz, sys.natoms);
      (void)err;
      // if err != 0 return -1;
      } else {

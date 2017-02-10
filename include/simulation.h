@@ -13,9 +13,9 @@
 #include <force_kinerg.h>
 #include <output.h>
 
+#define BLEN 200
 
-
-void simulation(int nprint,int natoms, int nsteps, double mass, double epsilon, 
+int simulation(int nprint,int natoms, int nsteps, double mass, double epsilon, 
           double sigma, double box, double rcut, double dt, char restfile[BLEN], 
 		char trajfile[BLEN], char ergfile[BLEN] ) ;
 

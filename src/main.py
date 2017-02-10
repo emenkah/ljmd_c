@@ -17,31 +17,30 @@ def read_file(inputfile):
     c_nstep = c_int(int(float(nstep)))
     c_dt = c_int(int(dt))
     c_line = c_int(int(line))
-
     c_mass = c_double(float(mass))
     c_epsilon = c_double(float(epsilon))
     c_sigma = c_double(float(sigma))
     c_rcut = c_double(float(rcut))
     c_box = c_double(float(box))
-
-   
-	c_restfile = c_char_p("".join(restfile.split()).encode())
-	c_trajfile = c_char_p("".join(trajfile.split()).encode())
-        c_ergfile = c_char_p("".join(ergfile.split()).encode())
+    c_restfile = c_char_p("".join(restfile.split()).encode())
+    c_trajfile = c_char_p("".join(trajfile.split()).encode())
+    c_ergfile = c_char_p("".join(ergfile.split()).encode())
 
 
+try:
+dso.simulation(c_nprint,c_natoms,c_nsteps,c_mass,c_epsilon,c_sigma,
+c_box,c_rcut,c_dt,c_restfile.value,c_trajfile.value,c_ergfile.value)
+
+except (OSError):
+print("Shared object `../ljmd.so` not found.\n Run `make` for solve the problem")
 
 
 
-
-    return c_natoms
-   # dso.mklkop(c_)
-
-    #return lines
-
-
-if __name__ == "__main__":
-
-    if(len(sys.argv)>1):
-        print read_file(sys.argv[-1])
+if __name__ == '__main__':
+	
+	if len(sys.argv) > 1:
+		inputfile = str(sys.argv[1])
+		run_mdsim(inputfile)
+	else:
+pass
 
