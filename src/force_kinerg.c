@@ -35,7 +35,7 @@ void ekin(mdsys_t *sys)
 void force(mdsys_t *sys) 
 {
     double r, rcsq, ffac;
-    double rx,ry,rz, c12, c6;
+    double rx,ry,rz, c12, c6, boxby2, boxby3 ;
     int i,j;
 
     /* zero energy and forces */
@@ -46,6 +46,8 @@ void force(mdsys_t *sys)
 	
 	c12 = 4.0 * sys->epsilon * pow(sys->sigma, 12.0);
 	c6  = 4.0 * sys->epsilon * pow(sys->sigma, 6.0);
+	boxby2 = (0.5*sys->box);
+	boxby3 =  2.0*boxby2;
 	
 	rcsq = sys->rcut * sys->rcut;
     for(i=0; i < (sys->natoms)-1; ++i) {
@@ -54,11 +56,21 @@ void force(mdsys_t *sys)
             /* particles have no interactions with themselves */
             
             /* get distance between particle i and j */
-            rx=pbc(sys->rx[i] - sys->rx[j], 0.5*sys->box);
-            ry=pbc(sys->ry[i] - sys->ry[j], 0.5*sys->box);
-            rz=pbc(sys->rz[i] - sys->rz[j], 0.5*sys->box);
+            rx=sys->rx[i] - sys->rx[j];
+         	while (rx >  boxby2) rx -= boxby3 ;			
+			while (rx < -boxby2) rx += boxby3;
+
+            ry=sys->ry[i] - sys->ry[j];
+         	while (ry >  boxby2) ry -= boxby3 ;			
+			while (ry < -boxby2) ry += boxby3;
+
+            rz=sys->rz[i] - sys->rz[j] ;
+         	while (rz >  boxby2) rz -= boxby3 ;			
+			while (rz < -boxby2) rz += boxby3;
+
             r = rx*rx + ry*ry + rz*rz;
       
+
             /* compute force and energy if within cutoff */
             if (r < rcsq) {
 				double r6, rinv;
