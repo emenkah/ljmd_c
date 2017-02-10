@@ -1,3 +1,32 @@
+release_v1:----------
+Perform the simulation and all the test 
+
+release_v2:---------
+Is an optimazed version for the force code 
+
+relise_v3:----------
+Is implemented the main.py part 
+
+
+Man:
+```bash
+make -> comile the case 
+
+make run -> compile the test.sh file 
+
+make test -> comile and run all test in the test folder
+
+make ljmd-serial.so -> create the shared library 
+
+For the compilation of the python script you need to run in the examples folder the follow line:
+
+pyhton ../src/main.py argon_108.inp 
+
+
+```
+
+
+
 ## Unoptimized
 Each sample counts as 0.01 seconds.
 | % time|   cumulative secs |   self secs| calls    | self us/calls| total us/call |name|           
