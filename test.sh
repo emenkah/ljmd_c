@@ -1,6 +1,7 @@
 #! /bin/bash
 
 rm -f examples/ljmd-serial.x 
+rm -f examples/gmon.out
 
 cp bin/ljmd-serial.x examples
 
