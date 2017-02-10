@@ -2,6 +2,7 @@
 SHELL=/bin/sh
 CC=gcc
 CFLAGS=-Wall -g -O3 -ffast-math -fomit-frame-pointer
+CFLAGS1=-Wall -pg -O3 -ffast-math -fomit-frame-pointer
 LDLIBS=-lm
 INCLUDE = include
 SRCDIR = src
@@ -15,6 +16,9 @@ OBJ=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 default: ljmd-serial.x
 	mv ./ljmd-serial.x bin 
+
+ljmd-perf: $(OBJ) 
+	$(CC) -o $@ $(CFLAGS1) $^ $(LDLIBS)
 
 
 clean:
