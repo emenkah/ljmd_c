@@ -22,7 +22,6 @@
 #define BLEN 200
 
 
-
 void forceTest(mdsys_t sys, int num_particles){
 	
 	int nprint;
