@@ -9,10 +9,10 @@ dso = CDLL('../ljmd-serial.so')
 def read_file(inputfile):
     f = open(inputfile,"r")
     lines = [line.rstrip('\n').split(" ")[0] for line in f]
+	natoms,mass,epsilon,sigma,rcut,box,restfile,\
+            trajfile,ergfile,nsteps,dt,nprint =lines
 
-    natoms,mass,epsilon,sigma,rcut,box,\
-    restfile,trajfile,ergfile,line,nstep,dt = lines
-
+    c_nprint   =c_int(int(nprint))
     c_natoms = c_int(int(natoms))
     c_nstep = c_int(int(float(nstep)))
     c_dt = c_int(int(dt))
@@ -24,9 +24,15 @@ def read_file(inputfile):
     c_rcut = c_double(float(rcut))
     c_box = c_double(float(box))
 
-    c_restfile = c_char_p(restfile)
-    c_trajfile = c_char_p(trajfile)
-    c_ergfile = c_char_p(ergfile)
+   
+	c_restfile = c_char_p("".join(restfile.split()).encode())
+	c_trajfile = c_char_p("".join(trajfile.split()).encode())
+        c_ergfile = c_char_p("".join(ergfile.split()).encode())
+
+
+
+
+
 
     return c_natoms
    # dso.mklkop(c_)

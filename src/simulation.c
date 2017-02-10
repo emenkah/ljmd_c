@@ -1,62 +1,26 @@
-/* 
- * simple lennard-jones potential MD code with velocity verlet.
- * units: Length=Angstrom, Mass=amu; Energy=kcal
- *
- * baseline c version.
- 
-
 #include <simulation.h>
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
 
-void simulation(        ) 
+void simulation(int nprint,int natoms, int nsteps, double mass, double epsilon, 
+          double sigma, double box, double rcut, double dt, char restfile[BLEN], 
+char trajfile[BLEN], char ergfile[BLEN] ) 
 {
-    int nprint;
-    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *traj,*erg;
+    int i;
+    FILE *fp,*traj,*erg;
     mdsys_t sys;
 
- /* read input file */
-    /*   if(get_a_line(stdin,line)) return 1;
-     sys->natoms=atoi(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->mass=atof(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->epsilon=atof(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->sigma=atof(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->rcut=atof(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->box=atof(line);
+    sys.natoms=natoms;
+    sys.mass=mass;
+    sys.epsilon=epsilon;
+    sys.sigma=sigma;
+    sys.rcut=rcut;
+    sys.box=box;
+    sys.nsteps=nsteps;
+    sys.dt=dt;
 
-     if(get_a_line(stdin,restfile)) return 1;
-     if(get_a_line(stdin,trajfile)) return 1;
-     if(get_a_line(stdin,ergfile)) return 1;
-     if(get_a_line(stdin,line)) return 1;
-     sys->nsteps=atoi(line);
-     if(get_a_line(stdin,line)) return 1;
-     sys->dt=atof(line);
-     if(get_a_line(stdin,line)) return 1;
-     *nprint=atoi(line);
- */
-
-sys->natoms=
-sys->mass=
-sys->epsilon=
-sys->sigma=
-sys->rcut=
-sys->box=
-
-restfile
-trajfile
-ergfile
-
-sys->nsteps=
-sys->dt=
-nprint=
 
  /* allocate memory */
      sys->rx=(double *)malloc(sys->natoms*sizeof(double));
