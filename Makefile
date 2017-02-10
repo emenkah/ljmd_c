@@ -1,9 +1,7 @@
 # -*- Makefile -*-
 SHELL=/bin/sh
 CC=gcc
-
-CFLAGS=-Wall -pg -O3 -ffast-math #-fomit-frame-pointer
-
+CFLAGS=-Wall -O3 -ffast-math -fomit-frame-pointer -fPIC
 LDLIBS=-lm
 INCLUDE = include
 SRCDIR = src
