@@ -1,8 +1,15 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <data.h>
+#include <constants.h>
+#include <utilities.h>
+#include <spvelverlet.h>
+#include <fpvelverlet.h>
 
-#include <test_velverlet.h>
 
-
-void test_velverlet()
+void  test_velverlet()
 {
 
   mdsys_t sys;
@@ -82,5 +89,14 @@ for(sys.nfi=1; sys.nfi <= sys.nsteps; ++sys.nfi) {
   free(sys.fy);
   free(sys.fz);
 
+
+}
+
+
+int main()
+{
+  test_velverlet();
+
+  return 0;
 
 }
