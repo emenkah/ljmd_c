@@ -11,30 +11,54 @@
 #include <stdlib.h>
 #include <math.h>
 #include <input.h>
-#include <velverlet.h>
+
 #include <data.h>
 #include <utilities.h>
 #include <force_kinerg.h>
 #include <output.h>
+#include <velverlet.h>
 
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
+
+
+
+/*******Data Verification *********/
+void InputReadTest(mdsys_t sys,  char * restfile, char * trajfile, char * ergfile, int nprint){
+
+    printf("\tVerifying Input Parameters\n");
+    printf("\t%d \n", sys.natoms);
+    printf("\t%g \n", sys.mass);
+    printf("\t%g \n", sys.epsilon);
+    printf("\t%g \n", sys.sigma);
+    printf("\t%g \n", sys.rcut);
+    printf("\t%g \n", sys.box);
+    printf("\t%s \n", restfile);
+    printf("\t%s \n", trajfile);
+    printf("\t%s \n", ergfile);
+    printf("\t%d \n", sys.nsteps);
+    printf("\t%g \n", sys.dt);
+    printf("\t%d \n", nprint);
+	
+}
+
+
+
+
 /* main */
-int main(int argc, char **argv) 
-{
-    int nprint;
-    char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *traj,*erg;
-    mdsys_t sys;
+int main(int argc, char **argv) {
 
 
-    readInputRest(&sys , restfile, trajfile, ergfile, line, &nprint);
+    
+
+	/*******Verifying input data **/	
+	InputReadTest(sys, restfile,  trajfile,  ergfile, nprint);	
+
 
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
-
     ekin(&sys);
     
     erg=fopen(ergfile,"w");
@@ -62,6 +86,11 @@ int main(int argc, char **argv)
     printf("Simulation Done.\n");
     fclose(erg);
     fclose(traj);
+
+
+	/***Unit tetsting ***/
+   	forceTest(sys1, 2); 
+
 
     free(sys.rx);
     free(sys.ry);

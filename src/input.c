@@ -51,6 +51,7 @@ int readInputRest(mdsys_t *sys , char * restfile, char * trajfile, char * ergfil
      sys->rcut=atof(line);
      if(get_a_line(stdin,line)) return 1;
      sys->box=atof(line);
+
      if(get_a_line(stdin,restfile)) return 1;
      if(get_a_line(stdin,trajfile)) return 1;
      if(get_a_line(stdin,ergfile)) return 1;
