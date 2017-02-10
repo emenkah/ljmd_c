@@ -12,10 +12,6 @@
 #include <math.h>
 #include <input.h>
 #include <velverlet.h>
-#include <test_kinerg.h>
-#include <test_velverlet.h>
-
-
 #include <data.h>
 #include <utilities.h>
 #include <force_kinerg.h>
@@ -24,73 +20,16 @@
 /* generic file- or pathname buffer length */
 #define BLEN 200
 
-
 /* main */
 int main(int argc, char **argv) 
 {
-     test_velverlet();
-     test_kinerg();
-
-
-    int nprint, i;
+    int nprint;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *fp,*traj,*erg;
+    FILE *traj,*erg;
     mdsys_t sys;
 
-    /* read input file */
-    if(get_a_line(stdin,line)) return 1;
-    sys.natoms=atoi(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.mass=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.epsilon=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.sigma=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.rcut=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.box=atof(line);
-    if(get_a_line(stdin,restfile)) return 1;
-    if(get_a_line(stdin,trajfile)) return 1;
-    if(get_a_line(stdin,ergfile)) return 1;
-    if(get_a_line(stdin,line)) return 1;
-    sys.nsteps=atoi(line);
-    if(get_a_line(stdin,line)) return 1;
-    sys.dt=atof(line);
-    if(get_a_line(stdin,line)) return 1;
-    nprint=atoi(line);
 
-    /* allocate memory */
-    sys.rx=(double *)malloc(sys.natoms*sizeof(double));
-    sys.ry=(double *)malloc(sys.natoms*sizeof(double));
-    sys.rz=(double *)malloc(sys.natoms*sizeof(double));
-    sys.vx=(double *)malloc(sys.natoms*sizeof(double));
-    sys.vy=(double *)malloc(sys.natoms*sizeof(double));
-    sys.vz=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fx=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fy=(double *)malloc(sys.natoms*sizeof(double));
-    sys.fz=(double *)malloc(sys.natoms*sizeof(double));
-
-    /* read restart */
-    fp=fopen(restfile,"r");
-    if(fp) {
-      int err;
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
-        }
-        for (i=0; i<sys.natoms; ++i) {
-            err = fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
-        }
-        fclose(fp);
-        azzero(sys.fx, sys.natoms);
-        azzero(sys.fy, sys.natoms);
-        azzero(sys.fz, sys.natoms);
-	(void)err;
-	// if err != 0 return -1;
-    } else {
-        perror("cannot read restart file");
-        return 3;
-    }
+    readInputRest(&sys , restfile, trajfile, ergfile, line, &nprint);
 
     /* initialize forces and energies.*/
     sys.nfi=0;
