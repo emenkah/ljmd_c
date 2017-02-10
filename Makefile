@@ -41,4 +41,6 @@ test: ljmd-serial.so
 
 clean_test:
 	$(MAKE)	$(MFLAGS) -C test clean
+run:
+	@bash test.sh
 
