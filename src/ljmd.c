@@ -73,8 +73,24 @@ void forceTest(mdsys_t sys, int num_particles){
     free(sys.fz);
 
 }
+/*******Data Verification *********/
+void InputReadTest(mdsys_t sys,  char * restfile, char * trajfile, char * ergfile, int nprint){
 
-
+	printf("\tVerifying INput Parameters\n");
+	printf("\t%d \n", sys.natoms);
+    printf("\t%g \n", sys.mass);
+    printf("\t%g \n", sys.epsilon);
+    printf("\t%g \n", sys.sigma);
+    printf("\t%g \n", sys.rcut);
+    printf("\t%g \n", sys.box);
+    printf("\t%s \n", restfile);
+    printf("\t%s \n", trajfile);
+    printf("\t%s \n", ergfile);
+    printf("\t%d \n", sys.nsteps);
+    printf("\t%g \n", sys.dt);
+    printf("\t%d \n", nprint);
+	
+}
 
 
 
@@ -95,8 +111,11 @@ int main(int argc, char **argv) {
 	}
 	else {
 		printf("\tInput file read FAILED!\n");
+		return 99;
 	}
-	
+
+	/*******Verifying input data **/	
+	InputReadTest(sys, restfile,  trajfile,  ergfile, nprint);	
 
 
     /* initialize forces and energies.*/
