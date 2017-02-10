@@ -54,8 +54,7 @@ char trajfile[BLEN], char ergfile[BLEN] )
          return 3;
      }
  
-     return 0;
-    
+        
     /* initialize forces and energies.*/
     sys.nfi=0;
     force(&sys);
@@ -98,4 +97,5 @@ char trajfile[BLEN], char ergfile[BLEN] )
     free(sys.fy);
     free(sys.fz);
 
+    return 0;
 }
