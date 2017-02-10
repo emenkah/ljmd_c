@@ -53,6 +53,7 @@ pyhton ../src/main.py argon_108.inp
 
 ## Unoptimized
 Each sample counts as 0.01 seconds.
+
 | % time|   cumulative secs |   self secs| calls    | self us/calls| total us/call |name         |           
 |-------|-------------------|------------|----------|--------------|---------------|-------------|
 |  76.91|      2.98   	 	| 2.98  	 |  10001   |298.37  	   | 377.97  	   |force        |
@@ -63,7 +64,7 @@ Each sample counts as 0.01 seconds.
 |   0.00|      3.89    		| 0.00 		 |     101  |   0.00 	   |    0.00       | output      |
 |   0.00|      3.89    		| 0.00 		 |      12  |   0.00 	   |    0.00       | get_a_line  |
 
-### After Optimization by avoinding computationally expensive math functions
+### After Optimization by avoinding computationally expensive math functions and repetitive calls to periodic boundary condition function
 
 | % time|   cumulative secs |   self secs| calls    | self us/calls| total us/call |name 		 |           
 |-------|-------------------|------------|----------|--------------|---------------|-------------|
@@ -73,4 +74,6 @@ Each sample counts as 0.01 seconds.
 | 0.00  |     1.42     		| 0.00 		 |    30012 | 0.50	       | 0.50  	       | azzero      |
 | 0.00  |     1.42     		| 0.00 		 |    10000 | 0.00	       | 0.00  	       | get_a_line  |
 
+
+![performance](examples/performance.png?raw=True)
 
